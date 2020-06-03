@@ -1,0 +1,40 @@
+\chapter{Appendix}
+\label{chap:appendix}
+
+\section{Random graph generation: A complex network approach}
+As we mentioned in section!!!!!!!!!!! \ref{S2V-DQL}, a collection of graph instances is needed for our method, S2V-DQN, to learn the evaluation function $\widehat{Q}$. In order to generate the graph instances, we use complex models which have been widely applied in modelling various real network systems such as World Wide Web (WWW), social networks, and ecological networks (\citeauthor{albert2002} \cite{albert2002}). The study of complex networks was initiated by \citeauthor{erdHos1960} \cite{erdHos1960}, who proposed a random graph model where, given $N$ nodes, $n$ arcs are selected from $N(N-1)/2$ allowable arcs with probability $p$. The random graph established by Erd{\H{o}}s and R{\'e}nyi \cite{erdHos1960} is referred to here as the ER model. This was then followed by two commonly used models: the Watts-Strogatz (WS) model (\citeauthor{watts1998} \cite{watts1998}) and the Barab\'asi-Albert (BA) model  (\citeauthor{barabasi1999emergence} \cite{barabasi1999emergence}). We will discuss these models in the following sections. The random graph theory is reveiwed in detail by \citeauthor{bollobas2001random} \cite{bollobas2001random} and \citeauthor{albert2002} \cite{albert2002}. Prior to formulating the complex network models, we first present fundamental measures and properties of complex networks.
+
+\subsection{Network structure measures and properties}
+We assume that a complex network is represented by a graph $G = (V, A)$, where $V$ is a set of nodes, $A$ is a set of arcs connecting two nodes in $V$, $|V| = N,$ and $|A| = M$. In the framework of random graph theory, the arcs are assumed to be  randomly distributed.
+
+\subsubsection{Degree distribution}
+Let $k_i$ denote the number of adjacent arcs of node $i$, which is called a \textit{degree} of node $i$. For the node degree $k$, we can then define a distribution function $P(k)$, which states the probability for node $i$ to be associated with $k$ arcs. The average degree of a network model is denoted by $\langle k \rangle$, which indicates the average number of neighbours of nodes in the network. \citeauthor{bollobas2001random} \cite{bollobas2001random} showed that the degree distribution of the ER model approaches a Poisson distribution. In other words, the number of nodes of degree $k$ in the network, denoted by $X_k$, has asymptotically Poisson distribution. \citeauthor{barabasi1999emergence} \cite{barabasi1999emergence}, however, discovered that many large networks in the real world such as WWW and citation patterns in science follow the \textit{scale-free} power law distribution, $P(k) \sim k^{-\gamma}$. We call such network \textit{scale-free} model.
+
+\subsubsection{Average path length}\\
+In order to quantify the structural features of complex networks \citeauthor{watts1998} \cite{watts1998} proposed two measures: \textit{average path length} and \textit{clustering coefficient}. The average path length, $\langle l \rangle$, calculates the average number of arcs in the shortest path over all pairs of nodes. This measure quantifies the global property of the network, in the sense that it estimates the separation between two nodes in the network model (\citeauthor{watts1998} \cite{watts1998}).
+
+\subsubsection{Clustering coefficient}\\
+The other structure measure introduced by \citeauthor{watts1998} \cite{watts1998} is clustering coefficient, denoted by $C_i$, which implies the local property of network model. Let us consider $k_i$ nearest neighbors of node $i$. Then there are $k_i(k_i-1)/2$ possible arcs between these $k_i$ nodes. For node $i$, the clustering coefficient then computes the fraction of these all possible arcs that actually exists in the model,
+$$C_i = \frac{2E_i}{k_i(k_i-1)},$$
+where $E_i$ is the number of arcs between the $k_i$ nearest neighbours of the node $i$. The average clustering coefficient of a network model $C$ is defined as
+$$C = \frac{1}{N}\sum_{i=1}^{N}C_i,$$
+which describes the ``cliquishness'' of given network model (\citeauthor{watts1998} \cite{watts1998}).
+
+\subsubsection{Small-world}\\
+The small-world concept states that any two nodes in large networks have short path lengths (\citeauthor{watts1998} \cite{watts1998}). \citeauthor{watts1998} \cite{watts1998} argue that this phenomenon can be found in real situations such as neural networks and power grids, and proposed the WS model that captures such small-world feature.
+
+\subsection{Barab\'asi-Albert model}
+Soon after the studies on the small-world model published by \citeauthor{watts1998} \cite{watts1998}, \citeauthor{barabasi1999emergence} \cite{barabasi1999emergence} proposed the scale-free model, which is referred to here as the BA model. The authors characterize the BA model by two key properties of real networks: \textit{growth} and \textit{preferential attachment}. The former indicates that the number of nodes in the model increases throughout the lifetime of the system by adding new nodes. The latter describes that a node with a larger number of connections has higher probability of being linked to the new nodes. \citeauthor{barabasi1999emergence} \cite{barabasi1999emergence} argue that the BA model displays the scale-free feature due to these two important properties, whereas the scale-free distribution is not observed from the two existing models - the ER model and the WS model.
+
+The algorithm of the BA model from \citeauthor{barabasi1999emergence} \cite{barabasi1999emergence} can be formulated as follows:
+
+\textit{Growth}\\
+Let $m_0$ denote the cardinality of the initial set of nodes. At every time step $t$, one new node is added and connected to $m$ different nodes that already exist in the network. After t time steps, $mt$ arcs are added to the system with $N = t + m_0$ nodes.
+
+\textit{Preferential attachment}\\
+\citeauthor{barabasi1999emergence} \cite{barabasi1999emergence} define the probability $\Pi$ that newly added nodes choose the arc associated with node $i$ as the following:
+$$\Pi(k_i) = \frac{k_i}{\sum_{j}k_j}$$
+\citeauthor{barabasi1999mean} \cite{barabasi1999mean} showed that the degree distribution $P(k)$ of the BA model is asymptotically $P(k) \sim 2m^2k^{-3}$, indicating that it displays the scale-free feature.
+
+\subsection{Supply chain networks}
+Motivated by the development of complex network theory, there have been many studies analyzing the network structure of various real systems such as communication networks and ecological webs (\citeauthor{albert2002} \cite{albert2002}). The structure of supply chain network, in particular, has been investigated by \citeauthor{hearnshaw2013complex}  \cite{hearnshaw2013complex}. The authors suggested that efficient supply chains have a short average path length $\langle l \rangle$, a high clustering coefficient $C$, and a power law connectivity distribution. Based on this argument, it has been derived that the scale-free models better represent the properties of efficient supply chain than the WS model or the ER model, despite its limitations including low clustering coefficient. Their conceptual findings can be observed from a number of empirical studies exploring the topological structure of transportation networks (\citeauthor{tarapata2015modelling} \cite{tarapata2015modelling}; \citeauthor{haznagy2015complex} \cite{haznagy2015complex}; \citeauthor{de2019public} \cite{de2019public}).

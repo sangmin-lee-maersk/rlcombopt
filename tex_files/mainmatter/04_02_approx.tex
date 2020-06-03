@@ -1,0 +1,175 @@
+\section{Value-function Approximation}
+\label{sec: value function approximation}
+In this section, we consider problems that have a large or continuous state space $\mathcal{S}$. Since a tabular method, such as Q-learning, uses a table to represent all state-action pairs, it may not be efficient for dealing with problems where $|\mathcal{S}|$ is possibly infinite. To address such problem using tabular methods, large size of memory is required to store the value of $Q(s,a)$ for each state-action pair; furthermore, numerous time and data are needed for a learning process, in order that all state-action pairs occur in the trajectory and are updated sufficiently many times.
+
+Hence, instead of using a table, we use \textit{function approximation} to find the best parameterized functional form with an estimated parameter
+\begin{align*}
+    \widehat{\boldsymbol{\psi}} = (\hat{\psi}_1, \hat{\psi}_2, \dots, \hat{\psi}_l)^\top\in\mathbb{R}^{l}, \quad l \ll |\mathcal{S}|\cdot|\mathcal{A}|
+\end{align*} which approximates the optimal action-value function $q_\ast$. For each state-action pair $(s,a)\in\mathcal{S}\times\mathcal{A}$, let us consider a \textit{feature vector}
+\begin{align*}
+    \boldsymbol{\phi}(s,a) = (\phi_1(s,a), \dots, \phi_H(s,a))^\top \in \mathbb{R}^H
+\end{align*}
+with a feature map $\boldsymbol{\phi}_h:\mathcal{S} \times \mathcal{A} \rightarrow \mathbb{R}$ for $h = 1, 2, \dots, H$. Then, the approximating function for $q_\ast(s,a)$ can be written as $\hat{q}(\boldsymbol{\phi}(s,a), \widehat{\boldsymbol{\psi}})$.
+
+To demonstrate the main idea of learning  $\hat{q}(\boldsymbol{\phi}(s,a), \widehat{\boldsymbol{\psi}})$, assume that there are $T$ data
+\begin{align}
+    \mathbf{X}_0, \dots, \mathbf{X}_t, \dots, \mathbf{X}_{T-1}
+\end{align}
+where $\mathbf{X}_t = (S_t, A_t, R_{t+1}, S_{t+1})$. The corresponding observations are written as
+\begin{align}
+    \mathbf{x}_0, \dots, \mathbf{x}_t, \dots, \mathbf{x}_{T-1}
+\end{align}
+where $\mathbf{x}_t = (s_t, a_t, r_{t+1}, s_{t+1})$. Then, the parameter $\widehat{\boldsymbol{\psi}}$ is computed as follows:
+\begin{align}
+    \widehat{\boldsymbol{\psi}} = \underset{\boldsymbol{\psi}}{\text{argmin}} \ \mathcal{L}\left(\boldsymbol{\psi}, \{\mathbf{x}_t\}_{t=0}^{T-1}\right)
+\end{align}
+where $\mathcal{L}$ is a loss function depending on the parameter $\boldsymbol{\psi}$ and the observed data $\{\mathbf{x}_t\}_{t=0}^{T-1}$. While there are many possible forms for the loss function $\mathcal{L}\left(\boldsymbol{\psi}, \{\mathbf{x}_t\}_{t=0}^{T-1}\right)$, let us introduce the most common case. As in the linear regression, one could think of minimizing the residual sum-of-squares
+\begin{align}
+    \sum_{t=0}^{T-1}\Big(q_\ast\left(s_t,a_t\right)-\hat{q}\left(\boldsymbol{\phi}\left(s_t,a_t\right), \widehat{\boldsymbol{\psi}}\right)\Big)^2
+    \label{eq:loss_common}
+\end{align}
+The true value $q_\ast(s_t,a_t)$, however, is not available during the learning process, and thus, an appropriate substitute for the value $q_\ast(s_t,a_t)$, which we call a \textit{target} as in \eqref{update_rule}, has to be used. If we follow the same target as in Q-learning, then \begin{align}
+    r_{t+1} + \gamma \  \underset{a \in \mathcal{A}}{\text{max }}\hat{q}(\boldsymbol{\phi}(s_t, a), \widehat{\boldsymbol{\psi}})
+\end{align} can be used in place of $q_\ast(s_t,a_t)$ in \eqref{eq:loss_common}, and thus, the residual sum-of-squares becomes
+\begin{align}
+        \sum_{t=0}^{T-1}\Big(r_{t+1} + \gamma \  \underset{a \in \mathcal{A}}{\text{max }}\hat{q}\left(\boldsymbol{\phi}(s_t, a), \widehat{\boldsymbol{\psi}}\right)-\hat{q}\left(\boldsymbol{\phi}\left(s_t,a_t\right), \widehat{\boldsymbol{\psi}}\right)\Big)^2
+    \label{eq:loss_common_qlearning}
+\end{align}
+
+%If a gradient descent method is used, then we have the following update rule for $\boldsymbol{\psi}$
+%\begin{align}
+%    \boldsymbol{\psi}_{t+1} \leftarrow \boldsymbol{\psi}_{t} - \alpha \nabla_\psi\mathcal{L}(\boldsymbol{\psi}_t, \mathbf{x}_t)
+%\end{align}
+
+
+%One of the naive approaches is to use $R_{t+1} + \gamma \hat{q}(\boldsymbol{\phi}(S_t,A_t), \boldsymbol{\psi})$.
+
+
+
+%Then the update rule for $\boldsymbol{\psi}$ is:
+%\begin{align}
+%    \psi_{t+1} \leftarrow \psi_{t} - \alpha \nabla_\psi\Big[R_{t+1} + \gamma \hat{q}(\boldsymbol{\phi}(S_t,A_t), \boldsymbol{\psi}) - \hat{q}(\boldsymbol{\phi}(S_t,A_t), \boldsymbol{\psi}) \Big]
+%\end{align}
+
+
+%There can be used various function approximation methods, and we may classify them into two groups based on how to formulate the approximating function. One group determines their approximating function by a pre-specified functional form with parameters, such as a linear method and a multi-layer artificial neural network. The other group, however, use a memory-based function approximation method, which utilizes training samples to approximate any target function, and their approximating functions are not restricted to a fixed form. Kernel regression is one of the memory-based methods. In the former case, the approximate value function can be denoted by $\hat{v}(s, \mathbf{w})$, with weight vector $\mathbf{w}\in\mathbb{R}^d$. In general, the dimension of the weight vector $d$ is much smaller than the total number of states $|\mathcal{S}|$, that is, $d \ll |\mathcal{S}|$.
+
+%+ $\eta(s)$ = a discounted weighting of states encountered starting at $s_0$ and then following $\pi$
+
+%+ when the discounting factor is 1, then it means the number of time steps spent, on average, in state $s$ in a single episode
+%\begin{align}
+%    \eta(s) = h(s) + \gamma\sum_{\tilde{s}}\eta(\tilde{s})\sum_a \pi(a|\tilde{s})p(s|\tilde{s},a), \text{for all %}s\in\mathcal{S},\label{eq:eta function}
+%\end{align}
+%where $h(s)$ denotes the probability that a state $s$ is a starting state of an episode, and $\tilde{s}$ is a %preceding state.
+%\begin{align}
+%    \eta(s) = \sum_{k=0}^\infty \gamma^k \ %\text{Pr}(s_0\rightarrow s, k, \pi),\label{eq:eta function}
+%\end{align}
+%where Pr$(s\rightarrow s', k, \pi)$ is the probability that the agent moves from state $s$ to state $s'$ in $k$ steps under a policy $\pi$, and $s_0$ denotes a start state.
+
+%a state distribution
+%\begin{align}
+%    \mu(s) = \frac{\eta(s)}{\sum_{s'}\eta(s')}, \text{for all } s\in\mathcal{S}.\label{eq:state distribution}
+%\end{align}
+
+
+\subsection{Linear Value-function Approximation}
+Let us now consider \hyperref[fig:toy graph]{Example 1} using a linear function approximation where
+\begin{align}
+    \hat{q}\big(\boldsymbol{\phi}(s,a), \widehat{\boldsymbol{\psi}}\big) = \widehat{\boldsymbol{\psi}}^\top \boldsymbol{\phi}(s,a)= \sum_{h=1}^H \hat{\psi}_h \phi_h(s,a) 
+\end{align}
+with $\boldsymbol{\phi}(s,a) = (\phi_1(s,a), \dots, \phi_H(s,a))^\top$ for all $(s,a) \in \mathcal{S}\times \mathcal{A}$. In this case, $\{\phi_h\}_{h=1, \dots, H}$ can be thought of a set of basis functions. There are many possible basis functions, however, in this section we shall empirically compares the performance of three basis function schemes: the polynomial basis, radial basis functions, and the Fourier basis.
+
+\subsubsection{The Polynomial Basis}
+Given $d$-dimensional state-action pair, a degree $n$ polynomial basis functions has $\binom{n+d}{d}$ terms. Note that the state-action pair $(s,a)$ in \hyperref[fig:toy graph]{Example 1} is 2-dimensional. Thus, in this case, the second degree polynomial basis are:
+\begin{align}
+    \boldsymbol{\phi}(s,a) = (1, s, a, s^2, s\cdot a, a^2)^\top,
+\end{align}
+and the third degree polynomial basis are
+\begin{align}
+    \boldsymbol{\phi}(s,a) = (1, s, a, s^2, sa, a^2, s^3, s^2a, sa^2, a^3)^\top,
+\end{align}
+and so on.
+\subsubsection{Radial Basis Functions}
+
+
+\subsubsection{The Fourier Basis}
+
+
+\subsection{Deep Q-Network}
+
+
+\section{Policy Gradient Methods}
+\label{subsec:PGM}
+To solve a finite Markov decision problems, we have so far investigated action-value methods that utilize the estimated action-value function to select an action. The action-value approach, however has several limitations, as argued in \citeauthor{sutton2000policy} \cite{sutton2000policy} and \citeauthor{degris2012off} \cite{degris2012off}. First, the action-value methods find it difficult to handle stochastic optimal policies, since their target policy is oriented towards a deterministic policy. For instance, in partially observable Markov decision processes an optimal policy is stochastic rather than deterministic (see \citeauthor{singh1994learning} \cite{singh1994learning}). Second, they are prone to the curse of dimensionality with respect to the size of action spaces, since the whole action space has to be searched in order to find the greedy action. Finally, their policy of selecting an action can be radically influenced by a small change in the action-value function, which may impinge on their convergence analysis.
+
+To overcome those limitations, an alternative approach, called \textit{policy gradient method}, has been developed. 
+Rather than deriving a deterministic policy from a value function, the policy gradient method learns a \textit{parameterized policy}, which can be represented by an independent function approximator as follows:
+\begin{align}
+\pi(a|s,\boldsymbol{\theta})=\text{Pr}\{A_t = a|S_t=s, \boldsymbol{\theta}_t=\boldsymbol{\theta}\},
+\end{align}
+where $\boldsymbol{\theta} \in \mathbb{R}^{d'}$ is the parameter vector of a policy. A policy $\pi(a|s,\boldsymbol{\theta})$ returns a selection probability for an action $a$ taken at time $t$ given a state $s$ taken at time $t$ with a parameter $\boldsymbol{\theta}$. The policy parameter can be learned by maximizing some scalar performance measure $\textbf{J}(\boldsymbol{\theta})$, which depends on the policy parameter $\boldsymbol{\theta}$. We maximize performance using a \textit{gradient ascent} method in the following way:
+\begin{align}
+    \boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t + \alpha\reallywidehat{\nabla J(\boldsymbol{\theta_t})},
+\end{align}
+where $\reallywidehat{\nabla J(\boldsymbol{\theta_t})} \in \mathbb{R}^{d'}$ is a stochastic estimate of the gradient of the true performance. The policy gradient methods performs well on both discrete and continuous action space. For now, we only consider the discrete action space which is not too large, compared to the continuous action spaces that involve infinitely many actions.
+
+In the former case, we formulate a policy using parameterized preferences, $h(s,a,\boldsymbol{\theta})\in\mathbb{R}$ for each $(a,s) \in \mathcal{A}(s) \times \mathcal{S}$, and an exponential soft-max function in the following way:
+\begin{align}
+    \pi(a|s,\boldsymbol{\theta}) = \frac{e^{h(s,a,\boldsymbol{\theta})}}{\sum_b e^{h(s,a,\boldsymbol{\theta})}}
+\end{align}
+This implies that in a given state the selection probability for each action is proportional to its preference. With this soft-max in action preferences, the policy gradient method can deal with a stochastic policy.\\ \\
+We now consider how to define the performance measure $\textbf{J}(\boldsymbol{\theta})$. There are two different ways to formulate the performance measure $\textbf{J}(\boldsymbol{\theta})$, depending on whether a learning task is episodic or continuing. In the episodic case, the performance is measured by the value of the start state $s_0$ of an episode under our parametrized policy $\pi_{\boldsymbol{\theta}}$ as follows:
+\begin{align}
+    J(\boldsymbol{\theta}) :&= v_{\pi_{\boldsymbol{\theta}}}(s_0) \nonumber\\
+    &= \mathbb{E}_{\pi_{\boldsymbol{\theta}}} \big[ G_0 \ | \ S_0 = s_0 \big]\nonumber\\
+    &= \mathbb{E}_{\pi_{\boldsymbol{\theta}}} \big[ \sum_{t=1}^{\infty}\gamma^{t-1}R_t \ | \ S_0 = s_0 \big]
+\end{align}
+where $v_{\pi_{\boldsymbol{\theta}}}$ is the true state-value function under $\pi_{\boldsymbol{\theta}}$. In the continuing case, however, the performance measure is defined as an average rate of reward per time step, as follows:
+\begin{align}
+    J(\boldsymbol{\theta}) := \lim_{h\rightarrow \infty}\frac{1}{h}\sum_{t=1}^{h}\mathbb{E}\big[ R_t \ | \ S_0, A_{0:t-1}\sim \pi_{\boldsymbol{\theta}} \big]
+\end{align}\\
+In this paper, however, we will focus on the episodic case.
+\clearpage
+\subsubsection{The Policy Gradient Theorem}
+the reason why we need this theorem
+\begin{align}
+    \nabla_\theta v_\pi(s) =& \nabla_\theta\Big[ \sum_a\pi(a|s)q_\pi(s,a) \Big], \qquad \text{for all }s\in\mathcal{S} \tag{by law of total probability}\nonumber\\
+    = \ & \sum_a\Big[ \nabla_\theta \pi(a|s)q_\pi(s,a) + \pi(a|s)\nabla_\theta q_\pi(s,a) \Big]\tag{by product rule}\nonumber\\
+    = \ & \sum_a\Big[ \nabla_\theta \pi(a|s)q_\pi(s,a) + \pi(a|s)\nabla_\theta \sum_{s',r}p(s',r|s,a)\big[r+\gamma v_\pi(s')\big] \Big]\tag{by \autoref{eq:reculsive-action-value}}\nonumber\\
+    = \ & \sum_a\Big[ \nabla_\theta \pi(a|s)q_\pi(s,a) + \pi(a|s) \sum_{s'} p(s'|s,a) \gamma \nabla_\theta v_\pi(s') \Big]\tag{by \autoref{eq:state-transition function}}\nonumber\\
+    = \ & \sum_a\big[ \nabla_\theta \pi(a|s)q_\pi(s,a) \big] + \sum_a\big[\pi(a|s) \sum_{s'} p(s'|s,a) \gamma \nabla_\theta v_\pi(s') \big] \label{eq:PGT01}
+\end{align}
+For the sake of notational simplicity, we denote the first term of \eqref{eq:PGT01} in the following way:
+$$\zeta(s):= \sum_a\big[ \nabla_\theta \pi(a|s)q_\pi(s,a) \big]$$
+\clearpage
+
+We now unroll the \autoref{eq:PGT01} with the notation used in \eqref{eq:eta function}:
+\begin{align}
+    \nabla_\theta v_\pi(s) =& \ \zeta(s) + \sum_a\big[\pi(a|s) \sum_{s'} p(s'|s,a) \gamma \nabla_\theta v_\pi(s') \big], \qquad \text{for all } s\in\mathcal{S} \nonumber\\
+    =& \ \zeta(s) + \gamma\sum_{s'}\sum_{a}\pi(a|s) p(s'|s,a) \nabla_\theta v_\pi(s') \nonumber\\
+    =& \ \zeta(s) + \gamma\sum_{s'}\text{Pr}(s\rightarrow s',1,\pi) \nabla_\theta v_\pi(s') \label{eq:PGT02}\\
+    =& \ \zeta(s) + \gamma\sum_{s'}\text{Pr}(s\rightarrow s',1,\pi) \big[\zeta(s') + \gamma\sum_{s''}\text{Pr}\left(s'\rightarrow s^{\prime\prime},1,\pi\right)\nabla_\theta v_\pi\left(s^{\prime\prime}\right)\big] \tag{by \autoref{eq:PGT02}}\\
+    =& \ \zeta(s) + \gamma\sum_{s'}\text{Pr}(s\rightarrow s',1,\pi)\zeta(s')\nonumber\\
+    &+ \ \gamma^2\sum_{s'}\text{Pr}(s\rightarrow s',1,\pi)\sum_{s''}\big[\text{Pr}\left(s'\rightarrow s^{\prime\prime},1,\pi\right)\nabla_\theta v_\pi\left(s^{\prime\prime}\right)\big] \nonumber\\
+    =& \ \zeta(s) + \gamma\sum_{s'}\text{Pr}(s\rightarrow s',1,\pi)\zeta(s') + \gamma^2\sum_{s''}\text{Pr}(s\rightarrow s'',2,\pi)\zeta(s'')\nonumber\\
+    &+ \gamma^3\sum_{s''}\text{Pr}(s\rightarrow s'',2,\pi)\sum_{s'''}\big[\text{Pr}(s''\rightarrow s''',1,\pi)\nabla_\theta v_\pi(s''')\big]\nonumber\\
+    &\vdots\nonumber\\
+    =& \ \sum_{x\in\mathcal{S}} \ \sum_{k=0}^{\infty}\gamma^{k} \ \text{Pr}(s\rightarrow x, k, \pi)\zeta(x)\nonumber\\
+    =& \ \sum_{x\in\mathcal{S}} \ \sum_{k=0}^{\infty}\gamma^{k} \ \text{Pr}(s\rightarrow x, k, \pi)\sum_a\big[ \nabla_\theta \pi(a|x)q_\pi(x,a) \big] \label{eq:PGT03}
+\end{align}
+Using \autoref{eq:PGT03}, the gradient of performance measure for the episodic case can be written as follows:
+\begin{align}
+    \nabla_\theta J(\boldsymbol{\theta}) =& \ \nabla_\theta v_\pi(s_0)\nonumber\\
+    =& \ \sum_{s\in\mathcal{S}}\big[\sum_{k=0}^{\infty}\gamma^{k} \ \text{Pr}(s_0\rightarrow s, k, \pi)\big]\sum_a \nabla_\theta \pi(a|s)q_\pi(s,a) \tag{by \autoref{eq:PGT03}}\\
+    =& \ \sum_s \eta(s) \sum_{a}\nabla_\theta \pi(a|s)q_\pi(s,a)\tag{by \autoref{eq:eta function}}\\
+    =& \ \sum_{s'}\eta(s') \ \sum_s \frac{\eta(s)}{\sum_{s'}\eta(s')}\sum_a \nabla_\theta \pi(a|s)q_\pi(s,a)\nonumber\\
+    =& \ \sum_{s'}\eta(s') \ \sum_s \mu(s)\sum_a \nabla_\theta \pi(a|s)q_\pi(s,a)\tag{by \autoref{eq:state distribution}}\\
+    \propto& \ \sum_s \mu(s)\sum_a \nabla_\theta \pi(a|s)q_\pi(s,a)
+\end{align}
+
+\subsection{Actor-Critic}
+
+
+
+\section*{Bibliographical Remarks}
+Our presentation of reinforcement learning in this chapter is mainly based on the work of \citeauthor{sutton2018reinforcement} \cite{sutton2018reinforcement}.

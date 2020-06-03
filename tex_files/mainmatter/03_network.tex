@@ -1,0 +1,101 @@
+\part{Materials and Methods}
+\chapter{Network Design}
+\label{chap:Network Design}
+\vspace{1cm}
+
+Network design problems have important applications in transportation planning, since it can represent the most essential features of transportation systems: ``strategic, tactical, and operational decision-making situations'' (\citeauthor{magnanti1984} \cite{magnanti1984}, p.1). This chapter is devoted to a network design problem that we attempt to solve --- an unsplittable multicommodity capacitated fixed-charge network design (UMCFND) problem. In \autoref{sec: UMCFND formulation} we fomulate the UMCFND problem, and we briefly discuss how it can be applied to the  transportation planning in \autoref{sec:applictions of UMCFND}.
+
+The UMCFND problem is a variant of a multicommodity capacitated fixed-charge network design (MCFND) problem (\citeauthor{gendron1994} \cite{gendron1994}), where the flow of each commodity is not split. That is, in the UMCFND problems, each commodity must be transported along a single path only. The objective of UMCFND problems is to optimize the total expenses consisting of the cost of shipping goods and the construction cost of edges while each commodity is delivered to its destination depot from its orgin depot along a single capacitated path. Thus, it can be viewed as an extension of the classic multicommodity flow problems (\citeauthor{ahujia1993network} \cite{ahujia1993network}) by forbidding the flow to split and introducing binary design variables which decide whether to include each edge in a network design model.
+
+When the construction cost of an edge is not considered the problem becomes an origin-destination integer multicommodity flow (ODIMCF) problem (\citeauthor{barnhart2000using} \cite{barnhart2000using}). In this paper, we are given a directed graph $G = (V, E)$, where $V$ and $E$ is the set of nodes and edges, respectively.
+
+\section{UMCFND Problem Formulation}
+\label{sec: UMCFND formulation}
+In this section, we describe the formulation of the UMCFND problem using the following notations.
+\subsubsection*{Notations}
+\begin{table}[!htbp]
+\begin{tabular}{ccl}
+    $V$ & & set of nodes in the network \\[0.5em]
+    $E$ & & set of edges \\[0.5em]
+    $\mathcal{K}$ & & set of commodities to be conveyed\\[0.5em]
+    $O(k)$ & & origin node for each commodity $k$\\[0.5em]
+    $D(k)$ & & destination node for each commodity $k$ \\[0.5em]
+    $d^k$ & & nonnegative quantity of each commodity $k$\\[0.5em]
+    $c_{ij}^k$ & & nonnegative unit flow cost of commodity $k$ on edge ($i$, $j$)\\[0.5em]
+    $f_{ij}$ & & nonnegative fixed design cost for edge ($i$, $j$)\\[0.5em]
+    $u_{ij}$ & & positive capacity on edge ($i$, $j$)\\[0.5em]
+\end{tabular}
+\end{table}
+\begin{align*}
+    x_{ij}^k &=
+    \begin{cases}
+    \ 1 & \text{if the entire quantity } d^k \text{ of commodity } k \text{ is assigned to edge }(i,j), \\
+    \ 0 & \text{otherwise}.
+    \end{cases}
+    \\
+    y_{ij} &=
+    \begin{cases}
+    \ 1 & \text{if edge } (i, j) \text{ is included in the network design}, \\
+    \ 0 & \text{otherwise}.
+    \end{cases}
+\end{align*}
+
+\vfill
+
+\subsubsection*{Formulation of UMCFND}
+The UMCFND problem can be formulated as an integer linear program:
+\begin{itemize}
+    \item\textit{Objective function}
+    \label{eq:obf}
+        \begin{align}
+            \text{minimize}\qquad &\sum_{k\in \mathcal{K}}\sum_{(i,j)\in E} c_{ij}^k d^k x_{ij}^k + \sum_{(i,j)\in E} f_{ij}y_{ij}
+        \end{align}
+        
+    \item\textit{Flow conservation constraints}
+        \begin{align}
+        \label{eq: Conservation constraints}
+            \sum_{(i,j)\in E}x_{ij}^k - \sum_{(j,i)\in E}x_{ji}^k = 
+            \begin{cases}
+            \ 1 & \text{if } i = O(k),\\
+            \ -1 & \text{if } i = D(k),\\
+            \ 0 & \text{if } i \neq O(k), i \neq D(k),\\
+            \end{cases} \ \  \forall i \in V, \forall k \in \mathcal{K}
+        \end{align}
+        
+    \item\textit{Capacity constraints}
+        \begin{align}
+        \label{eq:Capacity constraints}
+            \sum_{k\in \mathcal{K}} d^kx_{ij}^k \leq u_{ij}y_{ij}, \qquad \forall (i, j) \in E
+        \end{align}
+
+    \item\textit{Bounding constratints on design variables}
+        \begin{align}
+            &x_{ij}^k \leq 1, \qquad  \forall (i, j) \in E, \quad\forall k \in \mathcal{K},\label{eq:Bounding on design var1}\\
+            &y_{ij} \leq 1, \qquad  \forall (i, j) \in E
+        \end{align}
+        
+    \item\textit{Nonnegativity constraints on design variables}
+        \begin{align}
+        \label{eq:Nonnegativity on design var}
+            &x_{ij}^k \geq 0, \qquad  \forall (i, j) \in E, \quad\forall k \in \mathcal{K},\\
+            &y_{ij} \geq 0, \qquad  \forall (i, j) \in E
+        \end{align}
+    
+    \item\textit{Integrality constraints on design variables}
+        \begin{align}
+            &x_{ij}^k \ \text{ integer},\qquad  \forall (i, j) \in E, \quad\forall k \in \mathcal{K},\\
+            &y_{ij} \ \text{ integer}, \qquad  \forall (i, j) \in E \label{eq:Integrality on design var2}
+        \end{align}
+\end{itemize}
+
+The objective function, \eqref{eq:obf}, minimizes the sum of transportation cost of all commodities shipped to their destinations from their origins plus fixed costs of the constructed edges. The flow conservation constraints, \eqref{eq: Conservation constraints}, ensure that the flow of each commodity is routed using a single path from its origin node to its destination node. The capacity constraints, \eqref{eq:Capacity constraints}, limit the total flow on an open edge to its capacity, but also it states that the amount of flow on the closed edge must be zero until the fixed cost is paid. Constraints \eqref{eq:Bounding on design var1} -- \eqref{eq:Integrality on design var2} specify the nature of design variables.
+
+\section{UMCFND in Transportation Planning}
+\label{sec:applictions of UMCFND}
+
+\citeauthor{gendron2011} \cite{gendron2011} argue that the MCFND model has three crucial properties: the interaction between investment and operating expenses, aspects of the multiple commodities, and the capacity factor. With this regard, variants of the MCFND have been widely applied to the transportation planning. For instance,  \citeauthor{yaghini2012multicommodity} \cite{yaghini2012multicommodity} discuss applications of the MCFND in rail freight transportation planning, and \citeauthor{krile2004application} \cite{krile2004application} deals with applying the minimum cost multicommodity flow problem to finding an optimal plan of container shipping.
+
+A commodity is often conveyed along a single network path for greater operational efficiency and customer satisfaction (\citeauthor{barnhart2000using} \cite{barnhart2000using}). In this case, we can make good use of the UMCFND problem.
+
+As a global logistics service provider, solving the UMCFND problem may contribute to developing our business strategy, since it plays a critical role in coordinating shipments and building shipping routes economically. 
+\clearpage

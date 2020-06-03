@@ -1,0 +1,28 @@
+\part{Preliminaries}
+\chapter{Introduction}
+\label{chap:intro}
+\vspace{1cm}
+
+A \textit{combinatorial optimization} (CO) problem is a problem of either minimizing or maximizing a real-valued \textit{objective function} on a finite set of feasible solutions $\mathcal{S}$, which is comprised of all subsets of some finite \textit{ground set} $E$ (\citeauthor{lee_2004} \cite{lee_2004}). The CO problem can often be formulated as an optimization program with constraints. A problem is called a linear programming (LP) if both objective function and constrains are linear, and a mixed-integer linear programming (MILP) if an integrality constraint is additionally imposed on some of decision variables in the objective function. In many practical cases, CO is used to formulate problems that arise in industry, such as transportation, manufacturing, telecommunication, energy, and finance (\citeauthor{bengio2018machine} \cite{bengio2018machine}; \citeauthor{lee_2004} \cite{lee_2004}). Many of such problems, however, are NP-hard, which means that finding a solution to them is at least as hard as solving NP-complete problems --- the most difficult problems in NP where solutions can be verified in polynomial time (\citeauthor{paarsch2016gentle} \cite{paarsch2016gentle}). Due to their worst-case complexity, there is no known algorithms that produce the optimal solution to the NP-hard problems in polynomial time unless $P = NP$, and thus great attention has been paid to finding efficient methods to tackle NP-hard problems (\citeauthor{barrett2019exploratory} \cite{barrett2019exploratory}). % approximately 180 words (100-200 words)
+
+To handle NP-hard CO problems, there have been introduced three classic approaches: exact algorithms, approximation algorithms and heuristics. Exact algorithms, which are based on enumeration or branch-and-bound, find the optimal solution by searching the whole solution space; however, this method becomes intractable for a large problem. A polynomial-time approximation algorithm, on the other hand, produces a solution that is close to the optimal solution in polynomial time for all instances of the problem, but there still remain a number of problems that have no polynomial-time approximation algorithm (\citeauthor{williamson2011design} \cite{williamson2011design}). In practice,  heuristics are often used for solving a large problem, as they may perform more quickly than the other two classic approaches. This method, however, provides no theoretical guarantees, meaning that it may converge to a local optimal solution (\citeauthor{barrett2019exploratory} \cite{barrett2019exploratory}; \citeauthor{williamson2011design} \cite{williamson2011design}).
+
+In addition to these three traditional methods, recent years have witnessed the increase of using a machine learning (ML) method to handle NP-hard CO problems. \citeauthor{bengio2018machine} \cite{bengio2018machine} introduced two motivations for developing CO algorithms based on the ML technique. Given a CO problem in a high-dimensional space, ML can enhance an expert intuition on optimization algorithms by substituting a fast approximation, such as deep learning architectures, for heavy computations. Moreover, ML may bring a new insight into the best performing algorithm by exploring the whole decision space. A recent work by \citeauthor{silver2017mastering} \cite{silver2017mastering} has viewed these two motivations through a successful experiment on their computer program, AlphaGo, which defeats a world champion Go player in 2016. To tackle heavy computations of evaluating board positions and moves, deep neural networks and Monte Carlo tree search are employed in AlphaGo, and its policy network is trained on human expert games (\citeauthor{silver2016mastering} \cite{silver2016mastering}).
+
+There have been developed numerous learning-based methods for solving NP-hard CO problems on graphs.
+
+4th paragraph - Brief description of our methods and MCFND.
+
+5th paragraph - Brief description of our experiments and results.
+
+6th paragraph - "Overall our paper makes the following contributions"
+
+7th paragraph - "The rest of the paper is structured as follows. In chapter ~"
+
++++++ +++++ +++++ +++++ +++++
+
+
+
+
+
+\chapter{Related Work}
