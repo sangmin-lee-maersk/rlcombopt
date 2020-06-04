@@ -1,0 +1,24 @@
+\chapter{Related Work}
+\label{chap:related_work}
+\vspace{1cm}
+
+A reinforcement learning approach to solving NP-hard CO problem was pioneered in the nineties by \citeauthor{zhang1995reinforcement} \cite{zhang1995reinforcement}, who demonstrate how the temporal difference algorithm TD($\lambda$) can be applied to job shop scheduling problems, in particular a NASA space shuttle payload processing task. They compare the performance of TD method (\citeauthor{sutton1988learning} \cite{sutton1988learning}) to that of the Zweben's iterative repair (IR) method (\citeauthor{zweben1993scheduling} \cite{zweben1993scheduling}), which was then the best known algorithm for such problem, and show that TD scheduling produces better solution with less running time.
+
+Recently, \citeauthor{bello2016neural} \cite{bello2016neural} combined neural networks with a reinforcement learning to solve CO problems on graphs, particularly the traveling salesman problem (TSP) with up to 100 nodes. Their idea is to train neural networks with the reinforcement learning, rather than a supervised learning. Based on REINFORCE algorithm, which is a policy-gradient learning method proposed by \citeauthor{williams1992simple} \cite{williams1992simple}, \citeauthor{bello2016neural} presented two approaches -- RL pretraining and active search -- and used pointer networks (\citeauthor{vinyals2015pointer} \cite{vinyals2015pointer}) as their policy model. Their experiments on TSP showed that the reinforcement learning outperforms the supervised learning in training pointer networks. Moreover, their RL pretraining methods produce better results compared to OR-tool's local search.
+
+The framework presented in \citeauthor{bello2016neural} \cite{bello2016neural}, however, did not effectively reflect the graph structure of CO problems defined on graphs, such as connectivity and the problem's constraints. \citeauthor{khalil2017learning} \cite{khalil2017learning} handled such challenge with a graph embedding network. They proposed
+
+\citeauthor{kool2018attention} \cite{kool2018attention}
+
+\citeauthor{li2018combinatorial} \cite{li2018combinatorial}
+
+\citeauthor{ma2019combinatorial}\cite{ma2019combinatorial}
+
+\citeauthor{barrett2019exploratory} \cite{barrett2019exploratory}
+
+\citeauthor{li2019learning} \cite{li2019learning}
+
+\citeauthor{nazari2018reinforcement} \cite{nazari2018reinforcement}
+
+
+$\#\#$ Multi-RL
