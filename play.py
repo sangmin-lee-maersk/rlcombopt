@@ -5,10 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import os
-os.chdir('C:\\Users\\cryin\\Desktop\\Thesis Project\\10_CODE\\DQN_EXP')
 from instance_test import ggg, kdata
 
-os.chdir('C:\\Users\\cryin\\Desktop\\Thesis Project\\10_CODE\\DQN_EXP\\global_state\\local_reward')
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
 MAX_EPISODES = 1000
@@ -28,7 +26,7 @@ destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])
 env = Env(ggg, origin, destination, kdata[2,:], ARRIVAL_BONUS)
 
 #%%
-NUM_EXP = 30
+NUM_EXP = 5
 
 #%%
 EXP_DATA = []
