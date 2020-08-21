@@ -3,13 +3,10 @@
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
-
-import os
 from instance_test import ggg, kdata
-
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 50
 PUNISHMENT = 0
 ARRIVAL_BONUS = 0
 
@@ -33,6 +30,7 @@ EXP_DATA = []
 
 for j in range(NUM_EXP):
     
+    print(j)
     memory = [ReplayMemory(MEMORY_SIZE) for i in range(env.numagent)]
     multi = [DQN_Agent(i, env, memory[i],
                        hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, batch_size = BATCH_SIZE,
