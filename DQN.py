@@ -75,14 +75,19 @@ class DQN_Agent():
         self.eps_start = eps_start
         self.eps_end = eps_end
         self.eps_decay = eps_decay
-    
-        self.policy_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env)
-        self.target_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env)
+        
+        # if gpu is to be used
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        self.policy_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
+        self.target_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         
         self.optimizer = torch.optim.SGD(self.policy_net.parameters(), lr = self.alpha)
         self.MSE_loss = nn.MSELoss()
+        
+
         
     def get_action(self, state, step): # all agents' locations
 
@@ -106,7 +111,7 @@ class DQN_Agent():
         
         else:
             cst = np.concatenate((state[0], state[1]), axis = None)
-            x = torch.from_numpy(cst).float()
+            x = torch.from_numpy(cst).float().to(self.device)
             
             with torch.no_grad():
 #                alist = self.env.action_available2(x, self.agent_idx) #modify 
@@ -129,7 +134,7 @@ class DQN_Agent():
 
         else:
             cst = np.concatenate((state[0], state[1]), axis = None)
-            x = torch.from_numpy(cst).float()
+            x = torch.from_numpy(cst).float().to(self.device)
 
             with torch.no_grad():
 
@@ -152,8 +157,8 @@ class DQN_Agent():
         non_final_next_states = [batch.next_state[i] for i in np.where(non_final_mask)[0]]
         
         state_batch = torch.cat([self.policy_net.forward(state_batch[i]) for i in range(self.batch_size)])
-        action_batch = torch.from_numpy(np.asarray(batch.action)[:,self.agent_idx])
-        reward_batch = torch.from_numpy(np.asarray(batch.reward)[:,self.agent_idx])
+        action_batch = torch.from_numpy(np.asarray(batch.action)[:,self.agent_idx]).to(self.device)
+        reward_batch = torch.from_numpy(np.asarray(batch.reward)[:,self.agent_idx]).to(self.device)
         
         state_action_values = state_batch.gather(1,action_batch.long().view(self.batch_size,-1))
         leng = len(non_final_next_states)
@@ -161,7 +166,7 @@ class DQN_Agent():
         if leng != 0:
             max_Q = torch.cat([torch.max(self.target_net.forward(non_final_next_states[i])[0][self.env.action_available2(non_final_next_states[i], self.agent_idx)]).unsqueeze(0) for i in range(leng)])
         
-        next_state_values = torch.zeros(self.batch_size)
+        next_state_values = torch.zeros(self.batch_size).to(self.device)
         
         if leng != 0:
             next_state_values[non_final_mask] = max_Q
@@ -396,6 +401,7 @@ class Env:
 #%%
 def train(env, agents, memory, target_update, num_episodes, punishment):
     
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     episode_rewards = []
     episode_success = []
     episode_length = []
@@ -432,7 +438,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     done[no_actions] = True
                     reward[no_actions] -= punishment
                     
-                    [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float(), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]), axis = None)).float(), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]
+                    [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float().to(device), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]).to(device), axis = None)).float(), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]
                     [agents[i].optimize_model() for i in range(env.numagent)]
                     
                     episode_reward += reward
@@ -452,7 +458,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     
             episode_reward += reward
             
-            [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float(), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]), axis = None)).float(), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]            
+            [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float().to(device), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]), axis = None)).float().to(device), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]            
             [agents[i].optimize_model() for i in range(env.numagent)]
             
             if np.all(done):
