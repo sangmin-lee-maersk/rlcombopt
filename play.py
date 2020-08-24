@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from instance_test import ggg, kdata
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
-MAX_EPISODES = 50
+MAX_EPISODES = 1000
 PUNISHMENT = 0
 ARRIVAL_BONUS = 0
 
@@ -23,7 +23,7 @@ destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])
 env = Env(ggg, origin, destination, kdata[2,:], ARRIVAL_BONUS)
 
 #%%
-NUM_EXP = 5
+NUM_EXP = 30
 
 #%%
 EXP_DATA = []
@@ -34,7 +34,7 @@ for j in range(NUM_EXP):
     memory = [ReplayMemory(MEMORY_SIZE) for i in range(env.numagent)]
     multi = [DQN_Agent(i, env, memory[i],
                        hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, batch_size = BATCH_SIZE,
-                       eps_start = 0.9, eps_end = 0.05, eps_decay = 200)
+                       eps_start = 0.9, eps_end = 0.05, eps_decay = 2000)
                 for i in range(env.numagent)]
 
     episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT)

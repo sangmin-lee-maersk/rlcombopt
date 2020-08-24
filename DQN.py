@@ -77,8 +77,8 @@ class DQN_Agent():
         self.eps_decay = eps_decay
         
         # if gpu is to be used
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
+        #self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cpu")
         self.policy_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
         self.target_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
@@ -156,11 +156,11 @@ class DQN_Agent():
         non_final_mask = [not c for c in batch.terminal]
         non_final_next_states = [batch.next_state[i] for i in np.where(non_final_mask)[0]]
         
-        state_batch = torch.cat([self.policy_net.forward(state_batch[i]) for i in range(self.batch_size)])
+        #state_batch = torch.cat([self.policy_net.forward(state_batch[i]) for i in range(self.batch_size)])
         action_batch = torch.from_numpy(np.asarray(batch.action)[:,self.agent_idx]).to(self.device)
         reward_batch = torch.from_numpy(np.asarray(batch.reward)[:,self.agent_idx]).to(self.device)
         
-        state_action_values = state_batch.gather(1,action_batch.long().view(self.batch_size,-1))
+        state_action_values = self.policy_net.forward(state_batch).gather(1,action_batch.long().view(self.batch_size,-1))
         leng = len(non_final_next_states)
         
         if leng != 0:
@@ -401,7 +401,8 @@ class Env:
 #%%
 def train(env, agents, memory, target_update, num_episodes, punishment):
     
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+   # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     episode_rewards = []
     episode_success = []
     episode_length = []
