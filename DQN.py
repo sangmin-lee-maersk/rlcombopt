@@ -220,7 +220,7 @@ class Env:
         return action_list
         
     def action_available2(self, state, agent_idx): #state = tensor // location of all agents
-        state = state.numpy()
+        state = state.cpu().numpy()
         loc = state[agent_idx]
         cp = state[self.numagent:self.numagent+self.num_e]
         
@@ -438,7 +438,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     done[no_actions] = True
                     reward[no_actions] -= punishment
                     
-                    [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float().to(device), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]).to(device), axis = None)).float(), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]
+                    [memory[i].push(torch.from_numpy(np.concatenate((state[0], state[1]), axis = None)).float().to(device), actions, torch.from_numpy(np.concatenate((next_state[0], next_state[1]), axis = None)).float().to(device), reward, done[i]) if actions[i] != env.num_e else None for i in range(env.numagent)]
                     [agents[i].optimize_model() for i in range(env.numagent)]
                     
                     episode_reward += reward
@@ -449,7 +449,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     episode_success.append(success)
                     episode_length.append(step+1)
                     
-                    if episode % 100 == 0:
+                    if episode % 1 == 0:
                         print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
                         print("step " + str(step+1))
                         print("No action available" + ": " + "agent # " + str(no_actions))
@@ -471,7 +471,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     best_history_state = history_state
                     best_history_action = history_action
                 
-                if episode % 100 == 0:
+                if episode % 1 == 0:
                     print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
                     print("step " + str(step+1))
                     print("Best" + ": " + str(max_reward))
