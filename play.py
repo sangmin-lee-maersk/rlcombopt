@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 
 #%%
+import pickle
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from instance_test import ggg, kdata
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 3
 PUNISHMENT = 0
 ARRIVAL_BONUS = 0
+
+ALPHA = 0.00025
+GAMMA = 0.999
+
+EPS_START = 0.9
+EPS_END = 0.05
+EPS_DECAY = 2000
 
 BATCH_SIZE = 32
 TARGET_UPDATE = 10
@@ -17,27 +26,33 @@ MEMORY_SIZE = 1000
 HIDDEN_DIM1 = 60
 HIDDEN_DIM2 = 60
 
+
 origin = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[0,:]])
 destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])
 
 env = Env(ggg, origin, destination, kdata[2,:], ARRIVAL_BONUS)
 
 #%%
-NUM_EXP = 30
+NUM_EXP = 2
+setup_dict = {'max_episodes':MAX_EPISODES, 'punishment':PUNISHMENT, 'arrival_bonus':ARRIVAL_BONUS, 'alpha':ALPHA, 'gamma':GAMMA, 'eps_start':EPS_START, 'eps_end':EPS_END, 'eps_decay':EPS_DECAY, 'batch_size':BATCH_SIZE, 'target_update':TARGET_UPDATE, 'memory_size':MEMORY_SIZE, 'hidden_dim1':HIDDEN_DIM1, 'hidden_dim2':HIDDEN_DIM2}
+
 
 #%%
 EXP_DATA = []
-
+file_name1 = time.strftime("%Y%m%d-%H%M%S")
 for j in range(NUM_EXP):
     
     print(j)
     memory = [ReplayMemory(MEMORY_SIZE) for i in range(env.numagent)]
     multi = [DQN_Agent(i, env, memory[i],
-                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, batch_size = BATCH_SIZE,
-                       eps_start = 0.9, eps_end = 0.05, eps_decay = 2000)
+                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, alpha = ALPHA, gamma = GAMMA, batch_size = BATCH_SIZE,
+                       eps_start = EPS_START, eps_end = EPS_END, eps_decay = EPS_DECAY)
                 for i in range(env.numagent)]
 
+    start = time.time()
     episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT)
+    end = time.time()
+    episode_time = end-start
     
     best_answer = np.max([episode_rewards[i].sum() for i in range(MAX_EPISODES)])
     if best_answer > 0:
@@ -49,8 +64,15 @@ for j in range(NUM_EXP):
     
     parameters = [multi[i].target_net.state_dict() for i in range(env.numagent)]
     
-    save = [episode_rewards, episode_success, episode_length, best_states, best_actions, best_answer, target_policy_answer, parameters]
+    save = [episode_rewards, episode_success, episode_length, episode_time, best_states, best_actions, best_answer, target_policy_answer, parameters]
     EXP_DATA.append(save)
+
+#%%
+file_name2 = time.strftime("%Y%m%d-%H%M%S")
+with open('/home/sle175/rlcombopt/data/%s__%s.p' % (file_name1, file_name2), 'wb') as file:
+    pickle.dump(setup_dict, file)
+    pickle.dump(EXP_DATA, file)
+
 
 #%% NEED FOR PLOTTING
 from scipy.stats import t
