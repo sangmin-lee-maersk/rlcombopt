@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from instance_test import ggg, kdata
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
-NUM_EXP = 30
-MAX_EPISODES = 1000
+NUM_EXP = 1
+MAX_EPISODES = 3
 PUNISHMENT = 0
 ARRIVAL_BONUS = 0
 
@@ -27,6 +27,7 @@ MEMORY_SIZE = 1000
 HIDDEN_DIM1 = 60
 HIDDEN_DIM2 = 60
 
+DEVICE = "cuda"
 
 origin = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[0,:]])
 destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])
@@ -45,12 +46,14 @@ for j in range(NUM_EXP):
     print(j)
     memory = [ReplayMemory(MEMORY_SIZE) for i in range(env.numagent)]
     multi = [DQN_Agent(i, env, memory[i],
-                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, alpha = ALPHA, gamma = GAMMA, batch_size = BATCH_SIZE,
+                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2,
+                       device = DEVICE,
+                       alpha = ALPHA, gamma = GAMMA, batch_size = BATCH_SIZE,
                        eps_start = EPS_START, eps_end = EPS_END, eps_decay = EPS_DECAY)
                 for i in range(env.numagent)]
 
     start = time.time()
-    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT)
+    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT, DEVICE)
     end = time.time()
     episode_time = end-start
     
@@ -68,10 +71,10 @@ for j in range(NUM_EXP):
     EXP_DATA.append(save)
 
 #%%
-file_name2 = time.strftime("%Y%m%d-%H%M%S")
-with open('/home/sle175/rlcombopt/data/%s__%s.p' % (file_name1, file_name2), 'wb') as file:
-    pickle.dump(setup_dict, file)
-    pickle.dump(EXP_DATA, file)
+#file_name2 = time.strftime("%Y%m%d-%H%M%S")
+#with open('/home/sle175/rlcombopt/data/%s__%s.p' % (file_name1, file_name2), 'wb') as file:
+#    pickle.dump(setup_dict, file)
+#    pickle.dump(EXP_DATA, file)
 
 
 #%% NEED FOR PLOTTING
