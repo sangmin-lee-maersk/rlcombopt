@@ -9,7 +9,7 @@ from instance_test import ggg, kdata
 from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
 NUM_EXP = 1
-MAX_EPISODES = 3
+MAX_EPISODES = 5
 PUNISHMENT = 0
 ARRIVAL_BONUS = 0
 
@@ -24,10 +24,10 @@ BATCH_SIZE = 32
 TARGET_UPDATE = 10
 MEMORY_SIZE = 1000
 
-HIDDEN_DIM1 = 60
-HIDDEN_DIM2 = 60
+HIDDEN_DIM1 = 200
+HIDDEN_DIM2 = 200
 
-DEVICE = "cuda"
+DEVICE = "cpu"
 
 origin = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[0,:]])
 destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])

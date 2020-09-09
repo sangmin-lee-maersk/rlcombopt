@@ -59,7 +59,7 @@ class DQN(nn.Module):
 #%%
 class DQN_Agent():
     
-    def __init__(self, agent_idx, env, memory, hidden_dim1, hidden_dim2, alpha = 0.00025, gamma = 0.999,
+    def __init__(self, agent_idx, env, memory, hidden_dim1, hidden_dim2, device, alpha = 0.00025, gamma = 0.999,
                  batch_size = 32, eps_start = 0.9, eps_end = 0.05, eps_decay = 200):
         
         self.agent_idx = agent_idx
@@ -78,7 +78,7 @@ class DQN_Agent():
         
         # if gpu is to be used
         #self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.device = torch.device("cpu")
+        self.device = torch.device(device)
         self.policy_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
         self.target_net = DQN(self.env.state_space_dim, self.hidden_dim1, hidden_dim2, self.env.action_space_dim, env).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
@@ -399,10 +399,10 @@ class Env:
         return state
     
 #%%
-def train(env, agents, memory, target_update, num_episodes, punishment):
+def train(env, agents, memory, target_update, num_episodes, punishment, pu):
     
    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")
+    device = torch.device(pu)
     episode_rewards = []
     episode_success = []
     episode_length = []
@@ -450,7 +450,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     episode_success.append(success)
                     episode_length.append(step+1)
                     
-#                    if episode % 1000 == 0:
+#                   if episode % 1 == 0:
 #                        print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
 #                        print("step " + str(step+1))
 #                        print("No action available" + ": " + "agent # " + str(no_actions))
@@ -472,7 +472,7 @@ def train(env, agents, memory, target_update, num_episodes, punishment):
                     best_history_state = history_state
                     best_history_action = history_action
                 
-#                if episode % 1 == 0:
+#                if episode % 1  == 0:
 #                    print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
 #                    print("step " + str(step+1))
 #                    print("Best" + ": " + str(max_reward))

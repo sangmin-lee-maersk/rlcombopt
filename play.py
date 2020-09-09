@@ -10,15 +10,15 @@ from DQN import Env, DQN_Agent, ReplayMemory, train, test
 
 NUM_EXP = 30
 MAX_EPISODES = 1000
-PUNISHMENT = 0
+PUNISHMENT = 5000
 ARRIVAL_BONUS = 0
 
 ALPHA = 0.00025
-GAMMA = 0.999
+GAMMA = 1
 
 EPS_START = 0.9
 EPS_END = 0.05
-EPS_DECAY = 2000
+EPS_DECAY = 200
 
 BATCH_SIZE = 32
 TARGET_UPDATE = 10
@@ -27,6 +27,7 @@ MEMORY_SIZE = 1000
 HIDDEN_DIM1 = 60
 HIDDEN_DIM2 = 60
 
+DEVICE = "cpu"
 
 origin = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[0,:]])
 destination = np.array([ggg.vs.select(name = i).indices[0] for i in kdata[1,:]])
@@ -45,12 +46,12 @@ for j in range(NUM_EXP):
     print(j)
     memory = [ReplayMemory(MEMORY_SIZE) for i in range(env.numagent)]
     multi = [DQN_Agent(i, env, memory[i],
-                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, alpha = ALPHA, gamma = GAMMA, batch_size = BATCH_SIZE,
+                       hidden_dim1 = HIDDEN_DIM1, hidden_dim2 = HIDDEN_DIM2, device = DEVICE, alpha = ALPHA, gamma = GAMMA, batch_size = BATCH_SIZE,
                        eps_start = EPS_START, eps_end = EPS_END, eps_decay = EPS_DECAY)
                 for i in range(env.numagent)]
 
     start = time.time()
-    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT)
+    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT, DEVICE)
     end = time.time()
     episode_time = end-start
     

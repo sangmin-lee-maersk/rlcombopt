@@ -113,10 +113,10 @@ class DQN_Agent():
         else:
             cst = np.concatenate((state[0], state[1]), axis = None)
             x = torch.from_numpy(cst).float()
-            st = time.time()
+#            st = time.time()
             x = x.to(self.device)
-            ed = time.time()
-            print("state tensor from cpu to gpu: " + str(ed-st))
+#            ed = time.time()
+#            print("state tensor from cpu to gpu: " + str(ed-st))
             with torch.no_grad():
 #                alist = self.env.action_available2(x, self.agent_idx) #modify 
                 
@@ -162,15 +162,15 @@ class DQN_Agent():
         
         #state_batch = torch.cat([self.policy_net.forward(state_batch[i]) for i in range(self.batch_size)])
         action_batch = torch.from_numpy(np.asarray(batch.action)[:,self.agent_idx])
-        st = time.time()
+#        st = time.time()
         action_batch = action_batch.to(self.device)
-        ed = time.time()
-        print('action_batch from cpu to gpu: ' + str(ed-st))
+#        ed = time.time()
+#        print('action_batch from cpu to gpu: ' + str(ed-st))
         reward_batch = torch.from_numpy(np.asarray(batch.reward)[:,self.agent_idx])
-        st = time.time()
+#        st = time.time()
         reward_batch = reward_batch.to(self.device)
-        ed = time.time()
-        print('reward_batch from cpu to gpu: ' + str(ed-st))
+#        ed = time.time()
+#        print('reward_batch from cpu to gpu: ' + str(ed-st))
         state_action_values = self.policy_net.forward(state_batch).gather(1,action_batch.long().view(self.batch_size,-1))
         leng = len(non_final_next_states)
         
