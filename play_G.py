@@ -15,9 +15,9 @@ ARRIVAL_BONUS = 0
 ALPHA = 0.00025
 GAMMA = 1
 
-EPS_START = 0.9
-EPS_END = 0.05
-EPS_DECAY = 200
+EPS_START = 0.1
+EPS_END = 0.1
+EPS_DECAY = 1
 
 BATCH_SIZE = 32
 TARGET_UPDATE = 10
@@ -49,7 +49,7 @@ for j in range(NUM_EXP):
                 for i in range(env.numagent)]
     
     start = time.time()
-    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT)
+    episode_rewards, episode_success, episode_length, best_states, best_actions = train(env, multi, memory, TARGET_UPDATE, MAX_EPISODES, PUNISHMENT, DEVICE)
     end = time.time()
     episode_time = end-start
     
