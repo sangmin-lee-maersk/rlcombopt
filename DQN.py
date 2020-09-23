@@ -450,11 +450,11 @@ def train(env, agents, memory, target_update, num_episodes, punishment, pu):
                     episode_success.append(success)
                     episode_length.append(step+1)
                     
-#                   if episode % 1 == 0:
-#                        print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
-#                        print("step " + str(step+1))
-#                        print("No action available" + ": " + "agent # " + str(no_actions))
-#                        print("Best" + ": " + str(max_reward))
+                    if episode % 100 == 0:
+                        print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
+                        print("step " + str(step+1))
+                        print("No action available" + ": " + "agent # " + str(no_actions))
+                        print("Best" + ": " + str(max_reward))
                     break
                     
             episode_reward += reward
@@ -472,10 +472,10 @@ def train(env, agents, memory, target_update, num_episodes, punishment, pu):
                     best_history_state = history_state
                     best_history_action = history_action
                 
-#                if episode % 1  == 0:
-#                    print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
-#                    print("step " + str(step+1))
-#                    print("Best" + ": " + str(max_reward))
+                if episode % 100  == 0:
+                    print("Episode " + str(episode) + ": " + str(episode_reward.sum()))
+                    print("step " + str(step+1))
+                    print("Best" + ": " + str(max_reward))
                 break
             
             state = next_state
