@@ -5,9 +5,9 @@ import igraph as ig
 import os
 # os.chdir('C:\\Users\\cryin\\Desktop\\Thesis Project\\10_CODE\\Instances')
 #%%
-#file = 'c25_100_10_F_L_5.dow'
+file = 'c25_100_10_F_L_5.dow'
 #%%
-file = 'c100_400_30_F_L_10.dow'
+#file = 'c100_400_30_F_L_10.dow'
 #%%
 #file = 'c49.dow'
 #%%
