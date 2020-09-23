@@ -3,7 +3,6 @@
 import numpy as np
 import igraph as ig
 import os
-# os.chdir('C:\\Users\\cryin\\Desktop\\Thesis Project\\10_CODE\\Instances')
 #%%
 file = 'c25_100_10_F_L_5.dow'
 #%%
