@@ -61,39 +61,39 @@ def experiment(NUM_EXP, MAX_EPISODE, PUNISHMENT, ALPHA, GAMMA,
 #           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu",
 #           GRAPH = ggg, GPH_DATA = kdata)
 #%%
-experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
-           ALPHA = 0.00025, GAMMA = 1,
-           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
-           BATCH_SIZE = 16, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
+#experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
+#           ALPHA = 0.00025, GAMMA = 1,
+#           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
+#           BATCH_SIZE = 16, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
+#           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
 
 #%% TARGET_UPDATE
-print("target update")
-experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
-           ALPHA = 0.00025, GAMMA = 1,
-           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
-           BATCH_SIZE = 32, TARGET_UPDATE = 20, MEMORY_SIZE = 1000,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
-
-experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
-           ALPHA = 0.00025, GAMMA = 1,
-           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
-           BATCH_SIZE = 32, TARGET_UPDATE = 5, MEMORY_SIZE = 1000,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
+#print("target update")
+#experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
+#           ALPHA = 0.00025, GAMMA = 1,
+#           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
+#           BATCH_SIZE = 32, TARGET_UPDATE = 20, MEMORY_SIZE = 1000,
+#           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
+#
+#experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
+#           ALPHA = 0.00025, GAMMA = 1,
+#           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
+#           BATCH_SIZE = 32, TARGET_UPDATE = 5, MEMORY_SIZE = 1000,
+#           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
 
 #%% MEMORY_SIZE
-print("memory size")
-experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
-           ALPHA = 0.00025, GAMMA = 1,
-           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
-           BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 2000,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
-
-experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
-           ALPHA = 0.00025, GAMMA = 1,
-           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
-           BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 500,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
+#print("memory size")
+#experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
+#           ALPHA = 0.00025, GAMMA = 1,
+#           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
+#           BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 2000,
+#           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
+#
+#experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
+#           ALPHA = 0.00025, GAMMA = 1,
+#           EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
+#           BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 500,
+#           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
 
 #%% NETWORK SIZE
 print("network size")
@@ -101,8 +101,7 @@ experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.00025, GAMMA = 1,
            EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
            BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
-           HIDDEN_DIM1 = 30, HIDDEN_DIM2 = 30, DEVICE = "cpu",
-           GRAPH = ggg, GPH_DATA = kdata)
+           HIDDEN_DIM1 = 30, HIDDEN_DIM2 = 30, DEVICE = "cpu")
 
 experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.00025, GAMMA = 1,
@@ -116,8 +115,7 @@ experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.000125, GAMMA = 1,
            EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
            BATCH_SIZE = 32, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
-           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu",
-           GRAPH = ggg, GPH_DATA = kdata)
+           HIDDEN_DIM1 = 60, HIDDEN_DIM2 = 60, DEVICE = "cpu")
 
 experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.0005, GAMMA = 1,
