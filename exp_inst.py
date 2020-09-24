@@ -17,7 +17,7 @@ def instance(file):
     ggg.es["fixed cost"] = gdata[4]
     ggg.es["capacity"] = gdata[3]
     
-    return list(ggg, kdata)
+    return (ggg, kdata)
 
 #%%
 def experiment(NUM_EXP, MAX_EPISODE, PUNISHMENT, ALPHA, GAMMA,
@@ -69,7 +69,7 @@ def experiment(NUM_EXP, MAX_EPISODE, PUNISHMENT, ALPHA, GAMMA,
 
 #%%
 print('c25_100_10_F_T_5')
-experiment(NUM_EXP = 1, MAX_EPISODE = 2, PUNISHMENT = 5000,
+experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.00025, GAMMA = 1,
            EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
            BATCH_SIZE = 64, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
@@ -77,7 +77,7 @@ experiment(NUM_EXP = 1, MAX_EPISODE = 2, PUNISHMENT = 5000,
 
 #%%
 print('c25_100_10_V_L_5')
-experiment(NUM_EXP = 1, MAX_EPISODE = 2, PUNISHMENT = 5000,
+experiment(NUM_EXP = 10, MAX_EPISODE = 1000, PUNISHMENT = 5000,
            ALPHA = 0.00025, GAMMA = 1,
            EPS_START = 0.1, EPS_END = 0.1, EPS_DECAY = 1,
            BATCH_SIZE = 64, TARGET_UPDATE = 10, MEMORY_SIZE = 1000,
